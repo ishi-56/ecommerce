@@ -1,0 +1,100 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<section class="container sproduct">
+  <div class="row mt-5 px-5 product_data">
+    <div class="col-lg-5 col-md-10 col-12 mt-5 px-5">
+      <div class="position-relative">
+        {% if products.trending %}
+        <span class="badge bg-danger text-white position-absolute top-0 start-0">Trending</span>
+        {% endif %}
+        <img class="img-fluid w-100" src="{{products.product_image.url}}" alt="">
+      </div>
+    </div>
+    <div class="col-lg-5 col-md-12 mt-2 mt-lg-5">
+      <h3 class="py-3 font-weight-bold">{{products.product_name}}</h3>
+      <h4>Rs.{{products.selling_price}}</h4>
+
+      {% csrf_token %}
+      <input type="number" value="1" class="mx-1 me-5" style="width:50px;height:40px;font-size: 16px;padding-left:10px;">
+      <input type="hidden" class="prod_id" value="{{products.id}}" >
+      <span class="divpr" id="divpr{{products.id}}">
+    <button id="pr{{products.id}}" class="btn buy-btn btn-dark text-white add-to-cart" data-product-id="{{ products.id }}">Add to Cart<i class="fa fa-shopping-cart ms-1"></i></button>
+      </span>
+
+      <h4 class="mt-5 mb-2">Product Details</h4>
+      <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, temporibus velit delectus commodi quas iure saepe soluta neque quo. Et vero, voluptatum nesciunt hic porro asperiores accusantium expedita officia esse!</span>
+    </div>
+  </div>
+</section>
+
+<!-- Related products -->
+<div class="container text-center mt-5">
+  <h3>Related Products</h3>
+  <hr class="mx-auto mb-3" style="width:100px;height: 2px;background-color:red;">
+  <div class="owl-carousel owl-theme" style="margin:30px;margin-left:0px;padding-left:55px">
+    {% for pro in related_products %}
+    <div class="item" style="width:15rem;">
+      <div class="card border border-0 bg-image hover-zoom ripple ripple-surface ripple-surface-light px-3">
+        <img src="{{pro.product_image.url}}" class="card-img-top" alt={{ pro.product_name }}>
+        <div class="card-body text-center">
+          <h6 class="text-center">{{pro.product_name}}</h6>
+          <p class="text-center">Rs.{{pro.original_price}}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock content %}
+
+{% comment %} <script>
+  $(document).ready(function() {
+    // Set up CSRF token for AJAX requests
+    $.ajaxSetup({
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken')
+      }
+    });
+  });
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function addToCart() {
+    var prodId = "{{ products.id }}";
+    var url = "{% url 'add_to_cart' products.id %}";
+
+    $.ajax({
+      url: url,
+      method: 'POST',
+      data: {
+        prod_id: prodId,
+        csrfmiddlewaretoken: '{{ csrf_token }}'  // Add this line to include the CSRF token
+      },
+      success: function(response) {
+        console.log(response);
+        alertify.success(response.message);  // Display success message from the server
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+      }
+    });
+  }
+</script> {% endcomment %}
+
+
