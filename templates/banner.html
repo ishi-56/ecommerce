@@ -31,13 +31,47 @@
   </style> {% endcomment %}
 </head>
 <body>
-  <section id="banner" class="mb-5 py-5" style="background-image:url({% static 'images/2.jpg' %});">
+  <section id="banner" class="mb-5 py-5" style="background-image:url({% static 'images/fixed-banner.jpg' %});">
   <div class="container ms-5 mx-5 px-5">
     <h4 >Mid season's sale</h4>
     <h1 class="font-weight-bold">Get up to 50% off</h1>
     <button class="btn btn-danger text-uppercase">Shop Now</button>
   </div>
 </section>
+
+<div class="container text-center mt-0 py-5">
+  <h3>Sneakers</h3>
+  <hr class="mx-auto mb-5 products">
+  <div class="row ">
+    {% for item in sneakers %}
+   
+    <div class="col-md-2 col-6 ">
+        <div class="product-grid px-lg-0">
+            <div class="product-image">
+                    <img class="img-fluid" src="{{item.product_image.url}}">
+                <ul class="product-links py-lg-0 py-0">
+                  {% csrf_token %}
+                    <li><a class="add-to-cart" data-product-id="{{item.id}}"><i class="fa fa-shopping-cart"></i></a></li>
+                    <li><a class="add-to-wishlist" data-product-id="{{item.id}}" ><i class="fa fa-heart" style="cursor:pointer;"></i></a></li>
+                    <li><a href="{% url 'product_view' item.category.slug item.slug %}"><i class="fa fa-eye"></i></a></li>
+                </ul> 
+            </div>
+            <div class="product-content">
+              <h5 class="price">Rs.{{item.selling_price}} <span>Rs.{{item.original_price}}</span></h5>
+                <h3 class="title">{{item.product_name}}</h3>
+                {% comment %} <ul class="rating">
+                    <li class="fas fa-star"></li>
+                    <li class="fas fa-star"></li>
+                    <li class="fas fa-star"></li>
+                    <li class="far fa-star"></li>
+                    <li class="far fa-star"></li>
+                </ul> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 
   <!-- Bootstrap JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

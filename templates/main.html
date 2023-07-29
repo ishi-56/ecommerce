@@ -8,7 +8,7 @@
     {% comment %} <link rel="stylesheet" href="{% static 'css/navbar.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.css' %}">
-    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'css/navbar.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/product.css' %}">
     <link rel="stylesheet" href="{% static 'css/cart.css' %}">
 <link href="{% static 'css/offcanvas-navbar.css' %}" rel="stylesheet">
@@ -40,6 +40,7 @@
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 <script src="{% static 'js/owl.carousel.js' %}"></script>
 <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="https://js.stripe.com/v3/"></script>
 
 
 {% comment %} <script src="{% static 'js/custom.js' %}"></script> {% endcomment %}
@@ -192,6 +193,62 @@
     });
   }
 
+  $(document).on('click', '.add-to-wishlist', function() {
+    var productId = $(this).data('product-id');
+    addToWishlist(productId);
+  });
+
+  // Function to send AJAX request and add product to the cart
+  function addToWishlist(productId) {
+    $.ajax({
+      type: 'POST',
+      url: '/add_to_wishlist/',  // Update with your actual URL for adding to cart
+      data: {
+        'product_id': productId
+      },
+      success: function(response) {
+          // Handle success response
+          alertify.success(response.message);
+          //updateCartTotals();
+
+        
+      },
+      error: function(xhr, status, error) {
+        // Handle error response
+        console.error(error);
+      }
+    });
+  }
+
+  $('.remove-from-wishlist').click(function() {
+    var wishlistItemId = $(this).data('wishlist-item-id');
+    removeWishlistItem(wishlistItemId);
+  });
+
+  function removeWishlistItem(wishlistItemId) {
+    $.ajax({
+      type: 'POST',
+      url: '/remove_from_wishlist/',  // Update with your actual URL for removing cart item
+      data: {
+        'wishlist_item_id': wishlistItemId
+      },
+      success: function(response) {
+        // Handle success response, if needed
+        console.log(response.message);
+        alertify.success(response.message);
+        
+        // Reload the page or update the cart view
+        location.reload();
+      },
+      error: function(xhr, status, error) {
+        // Handle error response, if needed
+        console.error(error);
+        alert("Failed to remove product from wishlist");
+      }
+    });
+  }
+
+
   $('.remove-from-cart').click(function() {
     var cartItemId = $(this).data('cart-item-id');
     removeCartItem(cartItemId);
@@ -220,13 +277,67 @@
       }
     });
   }
+
+  // Function to initiate the checkout process
+  function initiateCheckout() {
+    // Calculate the total amount based on the cart data
+    const total = document.querySelector('#totalPrice');
+
+    // Send the total amount to the server in a POST request
+    fetch('/payment/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({'total': total }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the server's response (e.g., redirect to the Stripe checkout page)
+        console.log(data);
+        // For example, you can redirect to Stripe checkout page with the returned session ID
+        window.location.href = `https://checkout.stripe.com/c/pay/${data.sessionId}`;
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error('Error:', error);
+      });
+  }
 });
 
+
+
 </script>
-<script>
-    
-      
-</script>
+{% comment %} <script>
+    // Create an instance of the Stripe object with your publishable API key
+    var stripe = Stripe('pk_test_51NKJtHSE1kdFeTwCf3hVhj7Fb349cBPpeF3lzdnbSUBNBnRn3A3klUQ9l6sq8qLMGQCYe4Qupw53ww6kAS5u94qd00kNSTiceH');
+    var checkoutButton = document.getElementById('submitBtn');
+   
+    checkoutButton.addEventListener('click', function() {
+    // Create a new Checkout Session using the server-side endpoint you
+    // created in step 3.
+    fetch('/create-checkout-session/', {
+    method: 'POST',
+    })
+    .then(function(response) {
+    return response.json();
+    })
+    .then(function(session) {
+    return stripe.redirectToCheckout({ sessionId: session.id });
+    })
+    .then(function(result) {
+    // If `redirectToCheckout` fails due to a browser or network
+    // error, you should display the localized error message to your
+    // customer using `error.message`.
+    if (result.error) {
+    alert(result.error.message);
+    }
+    })
+    .catch(function(error) {
+    console.error('Error:', error);
+    });
+    });
+    </script> {% endcomment %}
 <script>
     alertify.set('notifier','position','top-right');
     {% for msg in messages %}

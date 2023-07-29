@@ -12,15 +12,27 @@ class Category(models.Model):
     
     def __str__(self):
        return self.name
+
+class SubCategory(models.Model):
+    name = models.CharField(max_length=150,null=False,blank=False)
+    slug = models.SlugField(unique=True,null=False,blank=False)
+    category = models.ForeignKey(Category,on_delete=models.CASCADE)
+    
+    def __str__(self):
+       return self.name
    
 class Product(models.Model):
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
+    sub_category = models.ForeignKey(SubCategory,on_delete=models.CASCADE,default="")
     slug = models.SlugField(unique=True,null=False,blank=False)
     product_name = models.CharField(max_length=150,null=False,blank=False)
     original_price = models.IntegerField(null=False,blank=False,default=0)
     selling_price = models.IntegerField(null=False,blank=False,default=0)
     product_description = models.TextField(max_length=2000,null=False,blank=False) 
     product_image = models.ImageField(upload_to='images/',default="")
+    type = models.CharField(max_length=150,null=False,blank=False,default="")
+    material = models.CharField(max_length=200,null=False,blank=False,default="")
+    brand = models.CharField(max_length=150,null=False,blank=False,default="")
     trending = models.BooleanField(default=False,help_text="0-default 1-Hidden")
     status = models.BooleanField(default=False,help_text="0-default 1-Hidden")
     quantity = models.IntegerField(null=False,blank=False,default=5)
@@ -40,7 +52,7 @@ class Cart(models.Model):
     def __str__(self):
        return self.product.product_name
    
-    def total(self):
+    def get_total(self):
         return self.product.selling_price*self.product_quantity
 
 class Order(models.Model):
@@ -71,13 +83,21 @@ class Order(models.Model):
         return '{}-{}'.format(self.id,self.tracking_no)
     
 class OrderItem(models.Model):
+    # user = models.ForeignKey(User,on_delete=models.CASCADE,default="")
     order = models.ForeignKey(Order,on_delete=models.CASCADE)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
-    price = models.FloatField(null=False)
+    product  = models.ForeignKey(Product,on_delete=models.CASCADE,default="")
+    price = models.FloatField(null=False,default=0)
+    # created_at = models.DateTimeField(auto_now_add=True)
     quantity = models.IntegerField(null=False)
     
     def __str__(self) :
         return '{}-{}'.format(self.id,self.order.tracking_no)
+    
+    def get_totals(self):
+        total = 0
+        for order_item in self.orderitems.all():
+            total += order_item.get_total()
+        return total
     
     
 class Profile(models.Model):
@@ -93,6 +113,15 @@ class Profile(models.Model):
     def __str__(self) :
         return self.user.username
     
+class Wishlist(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+       return self.product.product_name
+   
+
     
     
     

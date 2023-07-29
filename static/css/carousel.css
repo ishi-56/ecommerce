@@ -18,6 +18,16 @@
 .home .home-banner .home-banner-text h1 {
   font-size: 5rem;
 }
+.home .home-banner .home-banner-text1 {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(-110%, -50%);
+}
+
+.home .home-banner .home-banner-text1 h1 {
+  font-size: 5rem;
+}
 
 .home .carousel-indicators button {
   background-color: red;

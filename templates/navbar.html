@@ -85,27 +85,33 @@
 
 <nav class="navbar navbar-expand-lg shadow-sm fixed-top navbar-light bg-light pt-4" aria-label="Main navigation">
   <div class="container-fluid ">
-    <a class="navbar-brand" href="{% url 'home' %}">Offcanvas navbar</a>
+    <a class="navbar-brand " href="{% url 'home' %}">Offcanvas navbar</a>
     <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+    <div class="navbar-collapse offcanvas-collapse mt-lg-0 mt-2" id="navbarsExampleDefault">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
+        <li class="nav-item mt-lg-0 mt-3">
           <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+          <a class="nav-link" href="{% url 'shop_with_category' category="Men" %}">Men</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">About us</a>
+          <a class="nav-link" href="{% url 'shop_with_category' category="Women" %}">Women</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
+          <a class="nav-link" href="{% url 'shop_with_category' category="Footwear" %}">Footwear</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'wishlist' %}"><i class="fa fa-heart"></i></a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-user-circle-o"></i></a>
+          <a class="btn btn-dark ms-2" href="" data-bs-toggle="dropdown" aria-expanded="false">Login</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>

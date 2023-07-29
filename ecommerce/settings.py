@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+env = environ.Env()
+
+# read th .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-aqm0o4$0=wvlyc4^zp2_wh=k+do!oormq(1mt%_y7=cuv5qa-6'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -36,7 +42,7 @@ INSTALLED_APPS = [
     'jazzmin',
     'cart',
     'stripe',
-    'bootstrap5',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -82,7 +88,7 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ecommerce_store',
+        'NAME': 'store',
         'USER': 'root',
         'PASSWORD': 'ishita',
         'HOST': 'localhost',
@@ -127,9 +133,8 @@ CART_SESSION_ID = 'cart'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STRIPE_SECRET_KEY = 'sk_test_51NKJtHSE1kdFeTwC8njew3tauk4axYkRN8tulGjvgFR4Hmr7DOcFfZSiLuh3YJOJGhLz8L1OiAH9ksrG5Yi8iDTE00IcGtYVya'
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51NKJtHSE1kdFeTwCf3hVhj7Fb349cBPpeF3lzdnbSUBNBnRn3A3klUQ9l6sq8qLMGQCYe4Qupw53ww6kAS5u94qd00kNSTiceH'
-
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (

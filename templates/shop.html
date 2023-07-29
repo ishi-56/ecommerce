@@ -6,7 +6,35 @@
   .product-image .img-fluid{
     padding:50px;
   }
-}
+  }
+    input[type="range"] {
+      position: relative;
+      width: 100%;
+      height: 20px;
+      background-color: #ddd;
+      border-radius: 5px;
+    }
+  
+    input[type="range"]::before,
+    input[type="range"]::after {
+      position: absolute;
+      display: block;
+      color: #000;
+    }
+  
+    input[type="range"]::before {
+      content: attr(min);
+      left: 0;
+      top: -20px;
+    }
+  
+    input[type="range"]::after {
+      content: attr(max);
+      right: 0;
+      top: -20px;
+    }
+  
+
 </style>
 {% block content %}
 <section class="">
@@ -45,9 +73,30 @@
               <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
                 <div class="accordion-body">
                   <ul class="list-unstyled">
-                    <li><a href="{% url 'category_view' category='Men' %}" class="text-dark">Men </a></li>
-                    <li><a href="{% url 'category_view' category='Women' %}" class="text-dark">Women </a></li>
-                    <li><a href="{% url 'category_view' category='Footwear' %}" class="text-dark">Footwear </a></li>
+                    <ul class="list-group-item-dark">
+                    <h6  class="text-dark text-decoration-none mb-0">Men's wear </h6>
+                      <li><a href="{% url 'category_view' sub_category='T-Shirt' %}" class="text-dark text-decoration-none">T-Shirt</a></li>
+                      <li><a href="{% url 'category_view' sub_category='Shirt' %}" class="text-dark text-decoration-none">Shirt</a></li>
+                      <li><a href="{% url 'category_view' sub_category='Jeans(Men)' %}" class="text-dark text-decoration-none">Jeans</a></li>
+                      <li><a href="{% url 'category_view' sub_category='Trousers' %}" class="text-dark text-decoration-none">Trousers</a></li>
+                      <li><a href="{% url 'category_view' sub_category='Ethnic(Men)' %}" class="text-dark text-decoration-none">Ethnic</a></li>
+                    </ul>
+                    <ul class="list-group-item-dark">
+                    <h6  class="text-dark text-decoration-none mt-2 mb-0">Women's wear </h6>
+                    <li><a href="{% url 'category_view' sub_category='Tops' %}" class="text-dark text-decoration-none">Tops </a></li>
+                    <li><a href="{% url 'category_view' sub_category='Kurtis' %}" class="text-dark text-decoration-none">Kurtis </a></li>
+                    <li><a href="{% url 'category_view' sub_category='Jeans(Women)' %}" class="text-dark text-decoration-none">Jeans </a></li>
+                    <li><a href="{% url 'category_view' sub_category='Ethnic(Women)' %}" class="text-dark text-decoration-none">Ethnic </a></li>
+                    </ul>
+                    <ul class="list-group-item-dark">
+                      <h6  class="text-dark text-decoration-none mt-2 mb-0">Footwear </h6>
+                      <li><a href="{% url 'category_view' sub_category='Sports Shoes' %}" class="text-dark text-decoration-none">Sports Shoes </a></li>
+                    <li><a href="{% url 'category_view' sub_category='Sneakers (Men)' %}" class="text-dark text-decoration-none">Sneakers(Men) </a></li>
+                    <li><a href="{% url 'category_view' sub_category='Sneakers (Women)' %}" class="text-dark text-decoration-none">Sneakers(Women) </a></li>
+
+                      
+                    </ul>
+
                   </ul>
                 </div>
               </div>
@@ -122,36 +171,26 @@
                 </button>
               </h2>
               <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
-                <div class="accordion-body">
-                  <div class="range">
-                    <input type="range" class="form-range" id="customRange1" />
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-6">
-                      <p class="mb-0">
-                        Min
-                      </p>
-                      <div class="form-outline">
-                        <input type="number" id="typeNumber" class="form-control" />
-                        <label class="form-label" for="typeNumber">$0</label>
+                <div class="accordion-body filter-price">
+                  <form method="POST" action="{% url 'filter' %}">
+                    {% csrf_token %}
+                    <input type="range" min="299" max="1000" value="{{amount}}" oninput = "max_price.value=this.value" class="form-range" id="customRange1" />
+                    
+                    <div class="row mb-3">
+                      <div class="col-6">
+                        <p class="mb-0">
+                          Max
+                        </p>
+                    <input type="number" for="max_price" name="max_price" id="max_price" class="form-control" value="{{amount}}" onkeyup="customRange1.value=this.value" />
                       </div>
                     </div>
-                    <div class="col-6">
-                      <p class="mb-0">
-                        Max
-                      </p>
-                      <div class="form-outline">
-                        <input type="number" id="typeNumber" class="form-control" />
-                        <label class="form-label" for="typeNumber">$1,0000</label>
-                      </div>
-                    </div>
-                  </div>
-                  <button type="button" class="btn btn-white w-100 border border-secondary">apply</button>
+                    <button type="submit" class="btn btn-white w-100 border border-secondary">apply</button>
+                  </form>
                 </div>
-              </div>
+              </div>              
             </div>
             
-              
+               
               
             
               
@@ -193,7 +232,7 @@
                       <a class="add-to-cart" data-product-id="{{item.id}}"><i class="fa fa-shopping-cart" style="cursor:pointer;"></i></a>
                     </li>
                     <li>
-                      <a href="#"><i class="fa fa-heart"></i></a>
+                      <a class="add-to-wishlist" data-product-id="{{item.id}}" ><i class="fa fa-heart" style="cursor:pointer;"></i></a>
                     </li>
                     <li>
                       <a href="{% url 'product_view' item.category.slug item.slug %}"
@@ -215,4 +254,4 @@
         </div>
         
         {% endblock content %}
-        
+    

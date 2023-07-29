@@ -50,10 +50,10 @@
 
 <!--Category section-->
 <div class="category">
-  <div class="container text-center mt-2 py-5 px-4">
+  <div class="container text-center mt-2 py-5 px-lg-5 mx-lg-5 pb-lg-5">
     <h3>Our Categories</h3>
     <hr class="mx-auto mb-2 products">
-    <div class="row">
+    <div class="row px-lg-3">
       {% for item in category %}
       <div class="col-10 col-lg-4 mb-lg-0 mt-5 ms-4 ms-lg-0 mb-4 d-flex justify-content-between flex-column ">
         <a >
@@ -71,7 +71,7 @@
                <p class="offer-title text-uppercase font-weight-bold">
                   Don't miss this chance
                 </p> {% endcomment %}
-                <a href="{% url 'category_view' item.name %}"
+                <a 
                    class="btn btn-warning text-uppercase mt-4">
                   {{item.description}}
               </a> 
@@ -84,4 +84,4 @@
     </div>
   </div>
 </div>
-{% endblock %}
+{% endblock content %}

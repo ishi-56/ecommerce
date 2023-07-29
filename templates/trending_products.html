@@ -34,14 +34,14 @@
   <hr class="mx-auto mb-5 products">
   <div class="row ">
     {% for item in trending_products %}
-    <div class="col-md-3 col-6 ">
-        <div class="product-grid px-lg-4">
+    <div class="col-md-2 col-6 ">
+        <div class="product-grid px-lg-0">
             <div class="product-image">
                     <img class="img-fluid" src="{{item.product_image.url}}">
-                <ul class="product-links py-lg-1 py-0">
+                <ul class="product-links py-lg-0 py-0">
                   {% csrf_token %}
-                    <li><a class="add-to-cart" data-product-id="{{item.id}}"><i class="fa fa-shopping-cart"></i></a></li>
-                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                    <li><a class="add-to-cart" data-product-id="{{item.id}}"><i class="fa fa-shopping-cart" style="cursor:pointer;"></i></a></li>
+                    <li><a class="add-to-wishlist" data-product-id="{{item.id}}" ><i class="fa fa-heart" style="cursor:pointer;"></i></a></li>
                     <li><a href="{% url 'product_view' item.category.slug item.slug %}"><i class="fa fa-eye"></i></a></li>
                 </ul> 
             </div>
