@@ -39,10 +39,9 @@ ALLOWED_HOSTS = ['.vercel.app','.now.sh']
 
 INSTALLED_APPS = [
     'store',
-    'jazzmin',
+    'django-jazzmin',
     'cart',
     'stripe',
-    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
